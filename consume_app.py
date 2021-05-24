@@ -1,16 +1,16 @@
-from socket import MsgFlag
-from flask import Flask, jsonify, request, render_template
-import os
-from botocore import endpoint
-from flask import Flask, render_template, request
+from flask import Flask
 import boto3 
 import json
 import pulsar
+from decimal import Decimal
 
 app = Flask(__name__)
 
 dynamodb = boto3.resource('dynamodb', endpoint_url = "http://localhost:4566")
 table = dynamodb.Table('tracking_data')
+
+dynamodb = boto3.resource('dynamodb', endpoint_url = "http://localhost:4566")
+table_api = dynamodb.Table('test_api')
 
 client = pulsar.Client('pulsar://localhost:6650')
 consumer = client.subscribe('pulsar-test', 'my-subscription')
@@ -41,6 +41,8 @@ while True:
             print("Start putting item into dynamodb data table...")
             table.put_item(Item=new_data)
             print("Done put item")
+
+            table_api.put_item(Item=new_data)
         except Exception as e: 
             print(e)
     

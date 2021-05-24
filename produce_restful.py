@@ -15,27 +15,20 @@ api = Api(app)
 
 jwt = JWT(app, authenticate, identity)
 
-dynamodb = boto3.resource('dynamodb', endpoint_url = "http://localhost:4566")
-table = dynamodb.Table('test_api')
-
 class Tracking(Resource):
-	@jwt_required()
+	#@jwt_required()
 	def post(self):
 		request_data = request.get_json()
 		new_data = {
 				"id" : request_data["id"],
 				"message": request_data["message"],
-				"create_at": request_data["create_at"]
-				#"package": request_data["package"]
+				"create_at": request_data["create_at"],
+				"package": request_data["package"]
 			}
 		print(new_data)
 		#new_data = json.loads((new_data), parse_float=Decimal)
 		encode_new_data = json.dumps(new_data, indent=2).encode('utf-8')
-		json_data = json.loads(encode_new_data.decode('utf8'))
-		dict_data = json.loads(json.dumps(json_data))
-		new_data = json.loads(json.dumps(dict_data), parse_float=Decimal)
-		table.put_item(Item = new_data)
-
+		
 		client = pulsar.Client('pulsar://localhost:6650')
 		producer = client.create_producer('pulsar-test')
 		producer.send(encode_new_data)
