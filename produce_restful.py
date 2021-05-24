@@ -25,11 +25,11 @@ class Tracking(Resource):
 		new_data = {
 				"id" : request_data["id"],
 				"message": request_data["message"],
-				"create_at": request_data["create_at"],
-				"package": request_data["package"]
+				"create_at": request_data["create_at"]
+				#"package": request_data["package"]
 			}
 		print(new_data)
-		new_data = json.loads(json.dumps(new_data), parse_float=Decimal)
+		#new_data = json.loads((new_data), parse_float=Decimal)
 		table.put_item(Item = new_data)
 		encode_new_data = json.dumps(new_data, indent=2).encode('utf-8')
 
