@@ -30,8 +30,11 @@ class Tracking(Resource):
 			}
 		print(new_data)
 		#new_data = json.loads((new_data), parse_float=Decimal)
-		table.put_item(Item = new_data)
 		encode_new_data = json.dumps(new_data, indent=2).encode('utf-8')
+		json_data = json.loads(encode_new_data.decode('utf8'))
+		dict_data = json.loads(json.dumps(json_data))
+		new_data = json.loads(json.dumps(dict_data), parse_float=Decimal)
+		table.put_item(Item = new_data)
 
 		client = pulsar.Client('pulsar://localhost:6650')
 		producer = client.create_producer('pulsar-test')
