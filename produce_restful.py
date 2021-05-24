@@ -1,13 +1,10 @@
-import unittest
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_jwt import JWT, jwt_required
-
-from security import authenticate, identity
-
-import pulsar
+from decimal import Decimal
 import json
-
+from security import authenticate, identity
+import pulsar
 import boto3 
 
 
@@ -32,6 +29,7 @@ class Tracking(Resource):
 				"package": request_data["package"]
 			}
 		print(new_data)
+		new_data = json.loads(json.dumps(new_data), parse_float=Decimal)
 		table.put_item(Item = new_data)
 		encode_new_data = json.dumps(new_data, indent=2).encode('utf-8')
 
