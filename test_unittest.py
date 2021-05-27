@@ -11,10 +11,12 @@ def search_item(table):
     item = scanResponse['Items'][0]
     return item
     
-class TestAPI(unittest.TestCase,item):
-    def runTest(self):
+class TestAPI(unittest.TestCase):
+    def check_format(self):
         item = search_item(table)
         test_id = item['id']
+        self.assertIsInstance(test_id,str)
+        test_message = item['message']
         self.assertIsInstance(test_id,str)
 
 if __name__ == '__main__':

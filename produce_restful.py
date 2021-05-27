@@ -14,17 +14,21 @@ app.secret_key = 'jose'
 api = Api(app)
 
 jwt = JWT(app, authenticate, identity)
-
-class Tracking(Resource):
-	#@jwt_required()
-	def post(self):
-		request_data = request.get_json()
-		new_data = {
+def receive_message(request_data):
+	new_data = {
 				"id" : request_data["id"],
 				"message": request_data["message"],
 				"create_at": request_data["create_at"],
 				"package": request_data["package"]
 			}
+	return new_data
+
+class Tracking(Resource):
+	#@jwt_required()
+	def post(self):
+		request_data = request.get_json()
+		new_data = receive_message(request_data)
+		
 		print(new_data)
 		#new_data = json.loads((new_data), parse_float=Decimal)
 		encode_new_data = json.dumps(new_data, indent=2).encode('utf-8')

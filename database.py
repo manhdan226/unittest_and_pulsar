@@ -9,12 +9,12 @@ def show_all_table(table):
     for item in items:
         print(item)
 
-def create_table():
+def create_table(name, key):
     table = dynamodb.create_table(
-    TableName='tracking_data',
+    TableName=name,
     KeySchema=[
         {
-            'AttributeName': 'id',
+            'AttributeName': key,
             'KeyType': 'HASH'
         }
          
@@ -31,15 +31,32 @@ def create_table():
     }
     )
 
-    table.meta.client.get_waiter('table_exists').wait(TableName='tracking_data')
+    table.meta.client.get_waiter('table_exists').wait(TableName=name)
     print("Done!")
+    
 
 def delete_table(table):
     table.delete()
 
 if __name__ == "__main__":
-    table = dynamodb.Table('tracking_data')
-    #create_table()
+    #table = dynamodb.Table('tracking_data')
+    create_table("Popo.user", "id")
+    user = {"id": 1, "username": "Dan", "password": "DanD"}
+    table1 = dynamodb.Table('Popo.user')
+    table1.put_item(Item=user)
+
+    create_table("Popo.books", "id")
+    books = [[1,"Cha giàu, cha nghèo","Kinh tế"],
+            [2,"Từ tốt đến vĩ đại","Kinh tế"],
+            [3,"Chí Phèo","Văn học"],
+            [4,"Bình Ngô đại cáo","Lịch sử"]]
+
+    table2 = dynamodb.Table('Popo.books')
+    for book in books:
+        data = {"id": book[0], "name": book[1], "category": book[2]}
+        table2.put_item(Item=data)
+        
+
     #show_all_table(table)
     #delete_table(table)
         

@@ -38,9 +38,13 @@ while True:
 
         #add the data into dynamodb
         try:
-            print("Start putting item into dynamodb data table...")
+            print("Thêm vào database..")
             table.put_item(Item=new_data)
-            print("Done put item")
+            print("Thành công
+            
+            
+            
+            ")
 
             table_api.put_item(Item=new_data)
         except Exception as e: 
